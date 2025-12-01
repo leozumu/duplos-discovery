@@ -11,11 +11,11 @@ interface ContentWrapperProps {
 }
 
 export function ContentWrapper({ initialPosts, categories }: ContentWrapperProps) {
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
 
-    const handleCategorySelect = (categoryId: number | null) => {
+    const handleCategorySelect = (categoryId: number | undefined) => {
         if (selectedCategory === categoryId) {
-            setSelectedCategory(null); // Deselect if already selected
+            setSelectedCategory(undefined); // Deselect if already selected
         } else {
             setSelectedCategory(categoryId);
         }

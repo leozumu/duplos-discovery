@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { WPPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,7 @@ interface NewsCardProps {
     relatedPosts?: WPPost[];
 }
 
-export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
+export function NewsCard({ post }: NewsCardProps) {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     const featuredImage =
@@ -22,10 +22,10 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
     const date = new Date(post.date);
 
     return (
-        <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all hover:shadow-md border border-gray-100 mb-6">
-            {/* Image Section */}
-            <Link href={`/${post.slug}`} className="block">
-                <div className="relative aspect-video w-full overflow-hidden bg-gray-100">
+        <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-zinc-900 transition-all hover:bg-zinc-800/80 mb-6">
+            {/* Image Section - Clickable */}
+            <Link href={`/${post.slug}`} className="block w-full">
+                <div className="relative aspect-video w-full overflow-hidden bg-zinc-800">
                     <img
                         src={featuredImage}
                         alt={post.title.rendered}
@@ -37,62 +37,32 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
                         loading="lazy"
                     />
                     {!isImageLoaded && (
-                        <div className="absolute inset-0 animate-pulse bg-gray-200" />
+                        <div className="absolute inset-0 animate-pulse bg-zinc-800" />
                     )}
                 </div>
             </Link>
 
             {/* Content Section */}
-            <div className="flex flex-col p-5">
-                {/* Metadata */}
-                <div className="mb-3 flex items-center gap-4 text-xs text-gray-500 font-medium uppercase tracking-wider">
-                    <div className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
-                        <span>{authorName}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        <span>{format(date, "d MMM, yyyy", { locale: es })}</span>
-                    </div>
-                </div>
-
+            <div className="flex flex-col px-4 pt-3 pb-4">
                 {/* Title */}
-                <Link href={`/${post.slug}`}>
+                <Link href={`/${post.slug}`} className="block">
                     <h2
-                        className="mb-3 text-xl font-bold leading-tight text-gray-900 group-hover:text-blue-600 transition-colors"
+                        className="text-lg font-bold leading-tight text-zinc-100 group-hover:text-white transition-colors line-clamp-2"
                         dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                     />
                 </Link>
 
-                {/* Excerpt */}
-                <div
-                    className="mb-4 text-sm text-gray-600 line-clamp-3 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-                />
-
-                {/* Related Threads (Sticky UX) */}
-                {relatedPosts.length > 0 && (
-                    <div className="mt-4 border-t border-gray-100 pt-4">
-                        <h3 className="mb-2 text-xs font-semibold uppercase text-gray-400">
-                            Hilos Relacionados
-                        </h3>
-                        <ul className="space-y-2">
-                            {relatedPosts.map((related) => (
-                                <li key={related.id}>
-                                    <a
-                                        href={related.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-between text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-                                    >
-                                        <span dangerouslySetInnerHTML={{ __html: related.title.rendered }} className="line-clamp-1" />
-                                        <ArrowRight className="h-3 w-3 opacity-50" />
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+                {/* Metadata Footer */}
+                <div className="mt-3 flex items-center gap-3 text-xs text-zinc-500 font-medium">
+                    <div className="flex items-center gap-1">
+                        <User className="h-3 w-3" />
+                        <span className="truncate max-w-[100px]">{authorName}</span>
                     </div>
-                )}
+                    <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        <span>{format(date, "d MMM", { locale: es })}</span>
+                    </div>
+                </div>
             </div>
         </article>
     );
@@ -100,16 +70,14 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
 
 export function NewsCardSkeleton() {
     return (
-        <div className="mb-6 overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100">
-            <div className="aspect-video w-full animate-pulse bg-gray-200" />
-            <div className="p-5">
-                <div className="mb-3 flex gap-4">
-                    <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
-                    <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+        <div className="mb-6 overflow-hidden rounded-2xl bg-zinc-900">
+            <div className="aspect-video w-full animate-pulse bg-zinc-800" />
+            <div className="p-4">
+                <div className="mb-3 h-6 w-3/4 animate-pulse rounded bg-zinc-800" />
+                <div className="flex gap-3">
+                    <div className="h-3 w-16 animate-pulse rounded bg-zinc-800" />
+                    <div className="h-3 w-16 animate-pulse rounded bg-zinc-800" />
                 </div>
-                <div className="mb-3 h-6 w-3/4 animate-pulse rounded bg-gray-200" />
-                <div className="h-4 w-full animate-pulse rounded bg-gray-200 mb-2" />
-                <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200" />
             </div>
         </div>
     );
