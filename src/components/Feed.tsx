@@ -5,6 +5,7 @@ import { WPPost } from "@/lib/types";
 import { getPosts } from "@/lib/api";
 import { getRelatedPosts } from "@/lib/recommendations";
 import { NewsCard, NewsCardSkeleton } from "./NewsCard";
+import { cn } from "@/lib/utils";
 
 interface FeedProps {
     initialPosts: WPPost[];
@@ -118,38 +119,49 @@ export function Feed({ initialPosts, selectedCategory }: FeedProps) {
     };
 
     return (
-        <div className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+        <div className="max-w-2xl mx-auto px-4 pt-24 pb-20 space-y-8">
             {posts.map((post, index) => {
-                // Calculate related posts from the current pool of posts
+                const isFeatured = index === 0 && page === 2; // First post of the first page load
                 const related = getRelatedPosts(post, posts);
 
-                if (posts.length === index + 1) {
-                    return (
-                        <div ref={lastPostElementRef} key={post.id}>
-                            <NewsCard post={post} relatedPosts={related} />
-                        </div>
-                    );
-                } else {
-                    return <NewsCard key={post.id} post={post} relatedPosts={related} />;
-                }
+                return (
+                    <div
+                        ref={posts.length === index + 1 ? lastPostElementRef : null}
+                        key={post.id}
+                        className={cn(
+                            "transition-all duration-500",
+                            isFeatured ? "mb-10 scale-100" : "mb-6"
+                        )}
+                    >
+                        {isFeatured && (
+                            <div className="mb-4 flex items-center gap-2">
+                                <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                                <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                                    Destacado
+                                </span>
+                            </div>
+                        )}
+                        <NewsCard post={post} relatedPosts={related} />
+                    </div>
+                );
             })}
 
             {loading && (
-                <>
+                <div className="space-y-6">
                     <NewsCardSkeleton />
                     <NewsCardSkeleton />
-                </>
+                </div>
             )}
 
             {!hasMore && posts.length > 0 && (
-                <div className="text-center py-8 text-gray-500 text-sm">
-                    No hay más noticias por ahora.
+                <div className="text-center py-12 text-zinc-500 text-sm font-medium">
+                    Has llegado al final
                 </div>
             )}
 
             {!loading && posts.length === 0 && (
-                <div className="text-center py-20 text-gray-500">
-                    No se encontraron noticias en esta categoría.
+                <div className="text-center py-32 text-zinc-500">
+                    <p className="text-lg">No se encontraron noticias</p>
                 </div>
             )}
         </div>
