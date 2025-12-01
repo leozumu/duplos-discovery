@@ -1,6 +1,6 @@
 import { WPPost, Category } from "./types";
 
-const API_URL = "https://www.duplos.cl/wp-json/wp/v2";
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://www.duplos.cl/wp-json/wp/v2";
 
 export async function getPosts(page: number = 1, perPage: number = 10, categoryId?: number): Promise<WPPost[]> {
     try {
@@ -21,6 +21,24 @@ export async function getPosts(page: number = 1, perPage: number = 10, categoryI
     } catch (error) {
         console.error("Error fetching posts:", error);
         return [];
+    }
+}
+
+export async function getPostBySlug(slug: string): Promise<WPPost | null> {
+    try {
+        const res = await fetch(`${API_URL}/posts?slug=${slug}&_embed`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error("Failed to fetch post");
+        }
+
+        const posts = await res.json();
+        return posts.length > 0 ? posts[0] : null;
+    } catch (error) {
+        console.error("Error fetching post by slug:", error);
+        return null;
     }
 }
 

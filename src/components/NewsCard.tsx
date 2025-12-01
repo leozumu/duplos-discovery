@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Calendar, User, ArrowRight } from "lucide-react";
@@ -23,21 +24,23 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
     return (
         <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all hover:shadow-md border border-gray-100 mb-6">
             {/* Image Section */}
-            <div className="relative aspect-video w-full overflow-hidden bg-gray-100">
-                <img
-                    src={featuredImage}
-                    alt={post.title.rendered}
-                    className={cn(
-                        "h-full w-full object-cover transition-opacity duration-500",
-                        isImageLoaded ? "opacity-100" : "opacity-0"
+            <Link href={`/${post.slug}`} className="block">
+                <div className="relative aspect-video w-full overflow-hidden bg-gray-100">
+                    <img
+                        src={featuredImage}
+                        alt={post.title.rendered}
+                        className={cn(
+                            "h-full w-full object-cover transition-opacity duration-500",
+                            isImageLoaded ? "opacity-100" : "opacity-0"
+                        )}
+                        onLoad={() => setIsImageLoaded(true)}
+                        loading="lazy"
+                    />
+                    {!isImageLoaded && (
+                        <div className="absolute inset-0 animate-pulse bg-gray-200" />
                     )}
-                    onLoad={() => setIsImageLoaded(true)}
-                    loading="lazy"
-                />
-                {!isImageLoaded && (
-                    <div className="absolute inset-0 animate-pulse bg-gray-200" />
-                )}
-            </div>
+                </div>
+            </Link>
 
             {/* Content Section */}
             <div className="flex flex-col p-5">
@@ -54,10 +57,12 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
                 </div>
 
                 {/* Title */}
-                <h2
-                    className="mb-3 text-xl font-bold leading-tight text-gray-900 group-hover:text-blue-600 transition-colors"
-                    dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                />
+                <Link href={`/${post.slug}`}>
+                    <h2
+                        className="mb-3 text-xl font-bold leading-tight text-gray-900 group-hover:text-blue-600 transition-colors"
+                        dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+                    />
+                </Link>
 
                 {/* Excerpt */}
                 <div
