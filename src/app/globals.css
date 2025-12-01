@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 :root {
+    /* Light Mode Default */
+    --foreground-rgb: 24, 24, 27;
+    /* zinc-900 */
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
+}
+
+.dark {
+    /* Dark Mode */
     --foreground-rgb: 243, 244, 246;
     /* gray-100 */
     --background-start-rgb: 9, 9, 11;
@@ -13,6 +22,7 @@
 body {
     color: rgb(var(--foreground-rgb));
     background: rgb(var(--background-start-rgb));
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* CRITICAL: Reset links to remove default blue/purple and underline */
@@ -52,8 +62,14 @@ img {
     font-size: 1.125rem;
     /* 18px */
     line-height: 1.75;
+    color: #374151;
+    /* gray-700 (Light Mode) */
+    transition: color 0.3s;
+}
+
+.dark .post-content {
     color: #d1d5db;
-    /* gray-300 */
+    /* gray-300 (Dark Mode) */
 }
 
 .post-content p {
@@ -63,20 +79,32 @@ img {
 .post-content h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #f3f4f6;
-    /* gray-100 */
+    color: #111827;
+    /* gray-900 (Light Mode) */
     margin-top: 2em;
     margin-bottom: 1em;
     letter-spacing: -0.025em;
+    transition: color 0.3s;
+}
+
+.dark .post-content h2 {
+    color: #f3f4f6;
+    /* gray-100 (Dark Mode) */
 }
 
 .post-content h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #e5e7eb;
-    /* gray-200 */
+    color: #1f2937;
+    /* gray-800 (Light Mode) */
     margin-top: 1.5em;
     margin-bottom: 0.75em;
+    transition: color 0.3s;
+}
+
+.dark .post-content h3 {
+    color: #e5e7eb;
+    /* gray-200 (Dark Mode) */
 }
 
 .post-content ul,
@@ -84,7 +112,15 @@ img {
     margin-bottom: 1.5em;
     padding-left: 1.5em;
     list-style-type: disc;
+    color: #374151;
+    /* gray-700 (Light Mode) */
+    transition: color 0.3s;
+}
+
+.dark .post-content ul,
+.dark .post-content ol {
     color: #d1d5db;
+    /* gray-300 (Dark Mode) */
 }
 
 .post-content ol {
@@ -96,25 +132,43 @@ img {
 }
 
 .post-content blockquote {
-    border-left: 3px solid #4b5563;
-    /* gray-600 */
+    border-left: 3px solid #d1d5db;
+    /* gray-300 (Light Mode) */
     padding-left: 1em;
     font-style: italic;
-    color: #9ca3af;
-    /* gray-400 */
+    color: #6b7280;
+    /* gray-500 (Light Mode) */
     margin-bottom: 1.5em;
+    transition: border-color 0.3s, color 0.3s;
 }
 
-/* Links inside content should still be visible but not ugly blue */
+.dark .post-content blockquote {
+    border-left-color: #4b5563;
+    /* gray-600 (Dark Mode) */
+    color: #9ca3af;
+    /* gray-400 (Dark Mode) */
+}
+
+/* Links inside content */
 .post-content a {
-    color: #60a5fa;
-    /* blue-400 */
+    color: #2563eb;
+    /* blue-600 (Light Mode) */
     text-decoration: none;
-    border-bottom: 1px solid rgba(96, 165, 250, 0.3);
-    transition: border-color 0.2s;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.3);
+    transition: border-color 0.2s, color 0.3s;
+}
+
+.dark .post-content a {
+    color: #60a5fa;
+    /* blue-400 (Dark Mode) */
+    border-bottom-color: rgba(96, 165, 250, 0.3);
 }
 
 .post-content a:hover {
+    border-bottom-color: rgba(37, 99, 235, 1);
+}
+
+.dark .post-content a:hover {
     border-bottom-color: rgba(96, 165, 250, 1);
 }
 

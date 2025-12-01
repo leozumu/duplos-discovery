@@ -121,7 +121,7 @@ export function Feed({ initialPosts, selectedCategory }: FeedProps) {
     return (
         <div className="max-w-2xl mx-auto px-4 pt-24 pb-20 space-y-8">
             {posts.map((post, index) => {
-                const isFeatured = index === 0 && page === 2; // First post of the first page load
+                const isFeatured = index === 0; // Always highlight the first post
                 const related = getRelatedPosts(post, posts);
 
                 return (

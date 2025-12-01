@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-zinc-950 text-gray-100 antialiased transition-colors duration-300`}>
+      <body className={`${inter.className} bg-white dark:bg-zinc-950 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-300`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>
