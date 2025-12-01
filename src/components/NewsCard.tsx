@@ -22,10 +22,10 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
     const date = new Date(post.date);
 
     return (
-        <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 transition-all hover:border-zinc-700 mb-6">
+        <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/50 transition-all hover:bg-zinc-900 hover:border-zinc-700 mb-6">
             {/* Image Section - Clickable */}
             <Link href={`/${post.slug}`} className="block w-full">
-                <div className="relative aspect-video w-full overflow-hidden bg-zinc-800">
+                <div className="relative aspect-video w-full overflow-hidden bg-zinc-800 rounded-t-2xl">
                     <img
                         src={featuredImage}
                         alt={post.title.rendered}
@@ -47,7 +47,7 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
                 {/* Title */}
                 <Link href={`/${post.slug}`} className="block">
                     <h2
-                        className="text-lg font-bold leading-tight text-zinc-100 group-hover:text-white transition-colors line-clamp-2 font-sans"
+                        className="text-[17px] font-semibold leading-snug text-zinc-100 group-hover:text-white transition-colors line-clamp-2 tracking-tight"
                         dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                     />
                 </Link>
@@ -55,12 +55,12 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
                 {/* Metadata Footer */}
                 <div className="mt-3 flex items-center justify-between text-xs text-zinc-500 font-medium">
                     <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
+                        <div className="flex items-center gap-1.5">
+                            <User className="h-3 w-3 opacity-70" />
                             <span className="truncate max-w-[100px]">{authorName}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
+                        <div className="flex items-center gap-1.5">
+                            <Calendar className="h-3 w-3 opacity-70" />
                             <span>{format(date, "d MMM", { locale: es })}</span>
                         </div>
                     </div>
@@ -68,15 +68,15 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
 
                 {/* Related Threads (Sticky UX) */}
                 {relatedPosts.length > 0 && (
-                    <div className="mt-4 border-t border-zinc-800 pt-3">
+                    <div className="mt-4 border-t border-zinc-800/50 pt-3">
                         <ul className="space-y-2">
                             {relatedPosts.slice(0, 2).map((related) => (
                                 <li key={related.id}>
                                     <Link
                                         href={`/${related.slug}`}
-                                        className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                        className="flex items-center gap-2 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors group/link"
                                     >
-                                        <ArrowRight className="h-3 w-3" />
+                                        <ArrowRight className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5" />
                                         <span dangerouslySetInnerHTML={{ __html: related.title.rendered }} className="line-clamp-1" />
                                     </Link>
                                 </li>
@@ -91,7 +91,7 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
 
 export function NewsCardSkeleton() {
     return (
-        <div className="mb-6 overflow-hidden rounded-2xl bg-zinc-900">
+        <div className="mb-6 overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800">
             <div className="aspect-video w-full animate-pulse bg-zinc-800" />
             <div className="p-4">
                 <div className="mb-3 h-6 w-3/4 animate-pulse rounded bg-zinc-800" />

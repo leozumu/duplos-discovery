@@ -35,7 +35,6 @@ export default async function Page({ params }: PageProps) {
     }
 
     // Fetch related posts (latest posts excluding current one)
-    // Ideally we would fetch by category, but for now we'll fetch latest and filter
     const allPosts = await getPosts(1, 6);
     const relatedPosts = allPosts.filter(p => p.id !== post.id).slice(0, 4);
 
@@ -48,14 +47,14 @@ export default async function Page({ params }: PageProps) {
     return (
         <main className="min-h-screen bg-zinc-950 pb-20">
             {/* Header / Navigation */}
-            <div className="sticky top-0 z-10 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800">
+            <div className="sticky top-0 z-10 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800/50">
                 <div className="max-w-2xl mx-auto px-4 h-14 flex items-center">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+                        className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
                     >
-                        <ArrowLeft className="h-5 w-5" />
-                        <span className="font-medium">Volver</span>
+                        <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+                        <span className="font-medium text-sm">Volver</span>
                     </Link>
                 </div>
             </div>
@@ -64,17 +63,17 @@ export default async function Page({ params }: PageProps) {
                 {/* Header */}
                 <header className="mb-8">
                     <h1
-                        className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight"
+                        className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight tracking-tight"
                         dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                     />
 
                     <div className="flex items-center gap-6 text-sm text-zinc-400 font-medium uppercase tracking-wider">
                         <div className="flex items-center gap-2">
-                            <User className="h-4 w-4" />
+                            <User className="h-4 w-4 opacity-70" />
                             <span>{authorName}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="h-4 w-4 opacity-70" />
                             <span>{format(date, "d MMM, yyyy", { locale: es })}</span>
                         </div>
                     </div>
@@ -82,7 +81,7 @@ export default async function Page({ params }: PageProps) {
 
                 {/* Featured Image */}
                 {featuredImage && (
-                    <div className="mb-10 rounded-xl overflow-hidden bg-zinc-900 shadow-sm border border-zinc-800">
+                    <div className="mb-10 rounded-xl overflow-hidden bg-zinc-900 shadow-lg border border-zinc-800/50">
                         <img
                             src={featuredImage}
                             alt={post.title.rendered}
@@ -93,19 +92,19 @@ export default async function Page({ params }: PageProps) {
 
                 {/* Content */}
                 <div
-                    className="post-content space-y-4 text-zinc-300"
+                    className="post-content"
                     dangerouslySetInnerHTML={{ __html: post.content.rendered }}
                 />
 
                 {/* Related News Section */}
                 {relatedPosts.length > 0 && (
                     <div className="mt-16 pt-8 border-t border-zinc-800">
-                        <h3 className="text-xl font-bold text-white mb-6">Noticias Relacionadas</h3>
+                        <h3 className="text-lg font-bold text-white mb-6">Noticias Relacionadas</h3>
                         <div className="grid grid-cols-2 gap-4">
                             {relatedPosts.map((related) => {
                                 const relatedImage = related._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "https://via.placeholder.com/400x300?text=No+Image";
                                 return (
-                                    <Link key={related.id} href={`/${related.slug}`} className="group block bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 hover:border-zinc-700 transition-all">
+                                    <Link key={related.id} href={`/${related.slug}`} className="group block bg-zinc-900/50 rounded-xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900 transition-all">
                                         <div className="aspect-video w-full overflow-hidden bg-zinc-800">
                                             <img
                                                 src={relatedImage}
