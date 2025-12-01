@@ -19,7 +19,7 @@ export function Header({ categories, selectedCategory, onSelectCategory }: Heade
                 <div className="flex items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-2">
                         {/* Logo - assuming logo.svg exists, otherwise fallback or text */}
-                        <img src="/logo.svg" alt="Duplos" className="h-7 w-auto" />
+                        <img src="/logo.svg" alt="Duplos" className="h-7 w-auto dark:invert-0 invert" />
                     </div>
                     <div className="flex items-center gap-2">
                         <button

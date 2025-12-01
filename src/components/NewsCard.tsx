@@ -108,13 +108,13 @@ export function NewsCard({ post, relatedPosts = [] }: NewsCardProps) {
 
 export function NewsCardSkeleton() {
     return (
-        <div className="mb-6 overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800">
-            <div className="aspect-video w-full animate-pulse bg-zinc-800" />
+        <div className="mb-6 overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 transition-colors duration-300">
+            <div className="aspect-video w-full animate-pulse bg-gray-200 dark:bg-zinc-800" />
             <div className="p-4">
-                <div className="mb-3 h-6 w-3/4 animate-pulse rounded bg-zinc-800" />
+                <div className="mb-3 h-6 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-zinc-800" />
                 <div className="flex gap-3">
-                    <div className="h-3 w-16 animate-pulse rounded bg-zinc-800" />
-                    <div className="h-3 w-16 animate-pulse rounded bg-zinc-800" />
+                    <div className="h-3 w-16 animate-pulse rounded bg-gray-200 dark:bg-zinc-800" />
+                    <div className="h-3 w-16 animate-pulse rounded bg-gray-200 dark:bg-zinc-800" />
                 </div>
             </div>
         </div>

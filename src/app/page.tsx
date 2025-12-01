@@ -10,7 +10,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300">
       <ContentWrapper initialPosts={posts} categories={categories} />
     </main>
   );
