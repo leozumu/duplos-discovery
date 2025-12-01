@@ -1,0 +1,157 @@
+"use client";
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { WPPost } from "@/lib/types";
+import { getPosts } from "@/lib/api";
+import { getRelatedPosts } from "@/lib/recommendations";
+import { NewsCard, NewsCardSkeleton } from "./NewsCard";
+
+interface FeedProps {
+    initialPosts: WPPost[];
+    selectedCategory?: number | null;
+}
+
+export function Feed({ initialPosts, selectedCategory }: FeedProps) {
+    const [posts, setPosts] = useState<WPPost[]>(initialPosts);
+    const [page, setPage] = useState(2); // Start from page 2 since initial is page 1
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const observer = useRef<IntersectionObserver | null>(null);
+
+    // Reset feed when category changes
+    useEffect(() => {
+        const fetchCategoryPosts = async () => {
+            setLoading(true);
+            setPosts([]); // Clear current posts
+            try {
+                // Fetch page 1 for the new category (or all posts if null)
+                const newPosts = await getPosts(1, 10, selectedCategory || undefined);
+                setPosts(newPosts);
+                setPage(2);
+                setHasMore(newPosts.length > 0);
+            } catch (error) {
+                console.error("Error fetching category posts:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        // Only fetch if selectedCategory is defined (it can be null, which means "All")
+        // We skip the initial render fetch if we want to use initialPosts, 
+        // but since initialPosts are passed from server, we might want to use them.
+        // However, if selectedCategory changes, we MUST fetch.
+        // To avoid double fetch on mount (if selectedCategory is null initially), 
+        // we can check if posts match initialPosts? 
+        // Simpler: If selectedCategory is provided (even null) and different from what initialPosts represents...
+        // But initialPosts represents "All" (null).
+        // Let's just say: if this component mounts, we use initialPosts. 
+        // If selectedCategory changes *after* mount, we fetch.
+        // But selectedCategory comes from props.
+
+        // Actually, the parent `ContentWrapper` initializes `selectedCategory` to `null`.
+        // So on mount, `selectedCategory` is `null`.
+        // We should NOT fetch on mount if we have initialPosts and category is null.
+
+    }, [selectedCategory]);
+
+    // Better approach for the useEffect to avoid initial double fetch:
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        const fetchCategoryPosts = async () => {
+            setLoading(true);
+            setPosts([]); // Clear current posts
+            try {
+                const newPosts = await getPosts(1, 10, selectedCategory || undefined);
+                setPosts(newPosts);
+                setPage(2);
+                setHasMore(newPosts.length > 0);
+            } catch (error) {
+                console.error("Error fetching category posts:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategoryPosts();
+    }, [selectedCategory]);
+
+
+    const lastPostElementRef = useCallback(
+        (node: HTMLDivElement) => {
+            if (loading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    loadMorePosts();
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [loading, hasMore]
+    );
+
+    const loadMorePosts = async () => {
+        setLoading(true);
+        try {
+            const newPosts = await getPosts(page, 10, selectedCategory || undefined);
+            if (newPosts.length === 0) {
+                setHasMore(false);
+            } else {
+                setPosts((prev) => {
+                    // Filter out duplicates just in case
+                    const existingIds = new Set(prev.map(p => p.id));
+                    const uniqueNewPosts = newPosts.filter(p => !existingIds.has(p.id));
+                    return [...prev, ...uniqueNewPosts];
+                });
+                setPage((prev) => prev + 1);
+            }
+        } catch (error) {
+            console.error("Error loading more posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+            {posts.map((post, index) => {
+                // Calculate related posts from the current pool of posts
+                const related = getRelatedPosts(post, posts);
+
+                if (posts.length === index + 1) {
+                    return (
+                        <div ref={lastPostElementRef} key={post.id}>
+                            <NewsCard post={post} relatedPosts={related} />
+                        </div>
+                    );
+                } else {
+                    return <NewsCard key={post.id} post={post} relatedPosts={related} />;
+                }
+            })}
+
+            {loading && (
+                <>
+                    <NewsCardSkeleton />
+                    <NewsCardSkeleton />
+                </>
+            )}
+
+            {!hasMore && posts.length > 0 && (
+                <div className="text-center py-8 text-gray-500 text-sm">
+                    No hay más noticias por ahora.
+                </div>
+            )}
+
+            {!loading && posts.length === 0 && (
+                <div className="text-center py-20 text-gray-500">
+                    No se encontraron noticias en esta categoría.
+                </div>
+            )}
+        </div>
+    );
+}
