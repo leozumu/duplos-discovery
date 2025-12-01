@@ -15,12 +15,7 @@ export function Header({ categories, selectedCategory, onSelectCategory }: Heade
                 {/* Top Bar: Logo & Search */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">D</span>
-                        </div>
-                        <h1 className="text-xl font-bold tracking-tight text-white">
-                            Duplos
-                        </h1>
+                        <img src="/logo.svg" alt="Duplos" className="h-8 w-auto" />
                     </div>
                     <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors text-zinc-400 hover:text-white">
                         <Search className="h-5 w-5" />
@@ -33,10 +28,10 @@ export function Header({ categories, selectedCategory, onSelectCategory }: Heade
                         <button
                             onClick={() => onSelectCategory(undefined)}
                             className={`
-                                flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all border border-transparent
                                 ${!selectedCategory
-                                    ? "bg-white text-zinc-950"
-                                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                                    ? "bg-zinc-800 text-white"
+                                    : "bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white"
                                 }
                             `}
                         >
@@ -47,10 +42,10 @@ export function Header({ categories, selectedCategory, onSelectCategory }: Heade
                                 key={cat.id}
                                 onClick={() => onSelectCategory(cat.id)}
                                 className={`
-                                    flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                    flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all border border-transparent
                                     ${selectedCategory === cat.id
-                                        ? "bg-white text-zinc-950"
-                                        : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white"
+                                        ? "bg-zinc-800 text-white"
+                                        : "bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white"
                                     }
                                 `}
                             >

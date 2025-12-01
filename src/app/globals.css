@@ -15,6 +15,13 @@ body {
     background: rgb(var(--background-start-rgb));
 }
 
+/* Global Image Styles */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -26,6 +33,10 @@ body {
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
+}
+
+.mask-fade-right {
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
 }
 
 /* Reader View Styles - Dark Mode Adapted */
@@ -85,10 +96,15 @@ body {
 }
 
 .post-content a {
-    color: #60a5fa;
-    /* blue-400 - lighter for dark mode */
+    color: #f4f4f5;
+    /* zinc-100 - White text for links */
     text-decoration: underline;
     text-underline-offset: 2px;
+}
+
+.post-content a:hover {
+    color: #60a5fa;
+    /* blue-400 on hover */
 }
 
 .post-content img {
